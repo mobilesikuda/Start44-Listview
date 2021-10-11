@@ -3,12 +3,15 @@ package ru.sikuda.mobile.start44_listview
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
-
 import android.R.layout
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ListView
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemClickListener
+import android.widget.AbsListView
+
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -23,32 +26,79 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-//      //First step
-//        val lvMain: ListView = findViewById<View>(R.id.lvMain) as ListView
+//      //lesson 42
+//      val lvMain: ListView = findViewById<View>(R.id.lvMain) as ListView
 //
-//        // создаем адаптер
-//        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+//      val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
 //            this,
 //            R.layout.simple_list_item_1, names
+//      )
+//      lvMain.setAdapter(adapter)
+
+        //lesson 43
+//        val adapter = ArrayAdapter.createFromResource(
+//            this, R.array.names,
+//            layout.simple_list_item_single_choice
 //        )
-//
-//        // присваиваем адаптер списку
-//        lvMain.setAdapter(adapter)
+//        lvMain = findViewById<View>(R.id.lvMain) as ListView?
+//        lvMain?.run {
+//            //choiceMode = ListView.CHOICE_MODE_SINGLE
+//            choiceMode = ListView.CHOICE_MODE_MULTIPLE
+//            setAdapter(adapter)
+//        }
+//        val btnChecked: Button = findViewById<View>(R.id.btnChecked) as Button
+//        btnChecked.setOnClickListener(this)
+//        names = resources.getStringArray(R.array.names)
+
+        //lesson 44
+        lvMain = findViewById<View>(R.id.lvMain) as ListView
+
         val adapter = ArrayAdapter.createFromResource(
-            this, R.array.names,
-            layout.simple_list_item_single_choice
+            this, R.array.names, layout.simple_list_item_1
         )
-        lvMain = findViewById<View>(R.id.lvMain) as ListView?
-        lvMain?.run {
-            //choiceMode = ListView.CHOICE_MODE_SINGLE
-            choiceMode = ListView.CHOICE_MODE_MULTIPLE
-            setAdapter(adapter)
+        lvMain!!.adapter = adapter
+
+        lvMain!!.onItemClickListener =
+            OnItemClickListener { parent, view, position, id ->
+                Log.d(
+                    LOG_TAG, "itemClick: position = " + position + ", id = "
+                            + id
+                )
+            }
+
+        lvMain!!.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?, view: View?,
+                position: Int, id: Long
+            ) {
+                Log.d(
+                    LOG_TAG, "itemSelect: position = " + position + ", id = "
+                            + id
+                )
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                Log.d(LOG_TAG, "itemSelect: nothing")
+            }
+
         }
 
-        val btnChecked: Button = findViewById<View>(R.id.btnChecked) as Button
-        btnChecked.setOnClickListener(this)
+        lvMain!!.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScrollStateChanged(view: AbsListView?, scrollState: Int) {
+                Log.d(LOG_TAG, "scrollState = $scrollState")
+            }
 
-        names = resources.getStringArray(R.array.names)
+            override fun  onScroll(
+                view: AbsListView?, firstVisibleItem: Int,
+                visibleItemCount: Int, totalItemCount: Int
+            ) {
+                Log.d(
+                    LOG_TAG, "scroll: firstVisibleItem = " + firstVisibleItem
+                            + ", visibleItemCount" + visibleItemCount
+                            + ", totalItemCount" + totalItemCount
+                )
+            }
+        })
     }
 
     override fun onClick(v: View?) {

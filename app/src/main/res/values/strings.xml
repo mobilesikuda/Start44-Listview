@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">Start44-Listview</string>
     <string name="list_name">List of persons</string>
+    <string name="get_checked_items">Get checked items</string>
+    <string-array name="names">
+        <item>Ivan</item>
+        <item>Mary</item>
+        <item>Petr</item>
+        <item>Anton</item>
+        <item>Dasha</item>
+        <item>Boris</item>
+        <item>Kotja</item>
+        <item>Igor</item>
+        <item>Anna</item>
+        <item>Denis</item>
+        <item>Vadim</item>
+        <item>Olga</item>
+        <item>Sergey</item>
+    </string-array>
 </resources>

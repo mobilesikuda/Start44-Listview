@@ -7,18 +7,23 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
+import android.widget.AdapterView.OnItemLongClickListener
 import ru.sikuda.mobile.start44_listview.databinding.ActivityMainBinding
+import android.widget.ArrayAdapter
+
+
+
 
 
 class MainActivity : AppCompatActivity(){
-    val LOG_TAG = "myLogs"
+
+    val LOG_TAG = "logListView"
 
     lateinit var binding: ActivityMainBinding
-    //lateinit var lvMain: ListView
-//    var names = arrayOf(
-//        "Иван", "Марья", "Петр", "Антон", "Даша", "Борис",
-//        "Костя", "Игорь", "Анна", "Денис", "Андрей"
-//    )
+    //    var names = arrayOf(
+    //        "Иван", "Марья", "Петр", "Антон", "Даша", "Борис",
+    //        "Костя", "Игорь", "Анна", "Денис", "Андрей"
+    //    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,43 +34,77 @@ class MainActivity : AppCompatActivity(){
         setContentView(viewAll)
 
         //lesson 43
+//      //direct create adapter
+//        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+//            this,
+//            layout.simple_list_item_1,
+//            names
+//        )
+
+        //create adapter from resource
         val adapter = ArrayAdapter.createFromResource(this, R.array.names, layout.simple_list_item_1)
-        binding.lvMain.choiceMode = ListView.CHOICE_MODE_SINGLE //ListView.CHOICE_MODE_MULTIPLE
+
+        //bind to spinner
+        binding.spinner.adapter = adapter
+        binding.spinner.setPrompt("Chooce item:")
+        binding.spinner.setSelection(1)
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?, view: View?,
+                position: Int, id: Long
+            ) {
+                showToast("spinerSelect: position = " + position + ", id = " + id)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                showToast("spinerSelect: nothing")
+            }
+        }
+
+        //bind to list
+        binding.lvMain.choiceMode =  ListView.CHOICE_MODE_MULTIPLE //ListView.CHOICE_MODE_SINGLE
         binding.lvMain.adapter = adapter
 
         //OnItemSelectedListener is used for Spinners not for ListView
         binding.lvMain.onItemClickListener =
             OnItemClickListener { parent, view, position, id ->
-                showToast("itemClick: position = " + position + ", id = "+id)
+                showToast("Click: position = " + position + ", id = "+id)
+            }
+
+        binding.lvMain.onItemLongClickListener =
+            OnItemLongClickListener {  parent, view, position, id ->
+               showToast("LongClick: position = " + position + ", id = "+id)
+                return@OnItemLongClickListener true
             }
 
         //lesson 44
-        binding.lvMain.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?, view: View?,
-                position: Int, id: Long
-            ) {
-                showToast("itemSelect: position = " + position + ", id = "+id)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                showToast("itemSelect: nothing")
-                //Log.d(LOG_TAG, "itemSelect: nothing")
-            }
-
-        }
+        //цитата: Т.е. обработчик фиксирует какой пункт выделен. Честно говоря, я не очень понимаю как можно использовать такое выделение.
+        //Но обработчик для него есть и я решил про него рассказать. Пусть будет.
+//        binding.lvMain.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(
+//                parent: AdapterView<*>?, view: View?,
+//                position: Int, id: Long
+//            ) {
+//                showToast("itemSelect: position = " + position + ", id = "+id)
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//                showToast("itemSelect: nothing")
+//            }
+//        }
 
         binding.lvMain.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView?, scrollState: Int) {
-                Log.d(LOG_TAG, "scrollState = $scrollState")
+                showToast("scrollState = $scrollState")
             }
+
 
             override fun  onScroll(
                 view: AbsListView?, firstVisibleItem: Int,
                 visibleItemCount: Int, totalItemCount: Int
             ) {
-                Log.d(
-                    LOG_TAG, "scroll: firstVisibleItem = " + firstVisibleItem
+                //to many events - only Log
+                Log.d(LOG_TAG,"scroll: firstVisibleItem = " + firstVisibleItem
                             + ", visibleItemCount" + visibleItemCount
                             + ", totalItemCount" + totalItemCount
                 )
@@ -81,13 +120,19 @@ class MainActivity : AppCompatActivity(){
                     str += key.toString()+","
                     Log.d(LOG_TAG, key.toString())
                 }
-             }
+            }
             showToast("Selected:"+str)
+        }
+
+        binding.btnClearChecked.setOnClickListener{
+            binding.lvMain.checkedItemPositions.clear()
         }
     }
 
+    //write to log and show Toast
     fun showToast(str: String){
         Toast.makeText(this, str, Toast.LENGTH_SHORT).show()
+        Log.d(LOG_TAG,str)
     }
 }
 

@@ -4,17 +4,43 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btnChecked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/get_checked_items"
+            android:layout_margin="10dp">
+        </Button>
+        <Button
+            android:id="@+id/btnClearChecked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/clear_checked_items"
+            android:layout_margin="10dp">
+        </Button>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/spinner_name">
+    </TextView>
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </Spinner>
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/list_name">
     </TextView>
-    <Button
-        android:id="@+id/btnChecked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/get_checked_items">
-    </Button>
     <ListView
         android:id="@+id/lvMain"
         android:layout_width="match_parent"

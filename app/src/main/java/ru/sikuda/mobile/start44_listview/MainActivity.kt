@@ -11,10 +11,6 @@ import android.widget.AdapterView.OnItemLongClickListener
 import ru.sikuda.mobile.start44_listview.databinding.ActivityMainBinding
 import android.widget.ArrayAdapter
 
-
-
-
-
 class MainActivity : AppCompatActivity(){
 
     val LOG_TAG = "logListView"
